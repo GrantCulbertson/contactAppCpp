@@ -1,7 +1,7 @@
 // JavaScript for Contact Application Demo Program
 // Jim Skon, Kenyon College, 2022
 var contactList = [];
-const baseUrl = 'http://3.134.78.249:5004';
+const baseUrl = 'http://18.116.8.156:5004';
 
 /* Set up events */
 $(document).ready(function() {
@@ -25,10 +25,11 @@ $(document).ready(function() {
 // Build output table from comma delimited list
 function formatMatches(json) {
 
-    var result = '<table class="table table-success table-striped""><tr><th>First</th><th>Last</th><th>Phone</th><th>Type</th><th>Action</th><tr>';
+    var result = '<table class="table table-success table-striped""><tr><th>First</th><th>Last</th><th>Phone</th><th>Type</th><th>Address</th><th>Age</th><th>Action</th><tr>';
     json.forEach(function(entry, i) {
         result += "<tr><td class='first'>" + entry['first'] + "</td><td class='last'>" + entry['last'];
-        result += "</td><td class='phone'>" + entry['phone'] + "</td><td class='type'>" + entry['type'] + "</td>";
+        result += "</td><td class='phone'>" + entry['phone'] + "</td><td class='type'>" + entry['type'];
+	    result += "</td><td class='address'>" + entry['address'] + "</td><td class='age'>" + entry['age'] + "</td>";
         result += "<td><button type='button' class='btn btn-primary btn-sm edit' data-bs-toggle='modal' data-bs-target='#editContact' ";
         result += "onclick=\"editContact(" + i + ")\">Edit</button> ";
         result += "<button type='button' class='btn btn-primary btn-sm ' onclick=\"deleteContact("+ entry['ID'] +")\">Delete</button></td></tr>";
@@ -41,6 +42,7 @@ function formatMatches(json) {
 function displayMatches(results) {
 
     contactList = results["results"];
+	console.log("displayMatches is running " + contactList);
     console.log("Results:"+JSON.stringify(contactList));
     document.getElementById("searchresults").innerHTML = formatMatches(contactList);
     
@@ -66,11 +68,13 @@ function findMatches(search) {
 
 /* Add contact functions */
 function processAdd(results) {
+	console.log("processAdd is running" + results);
     console.log("Add:", results["status"]);
     document.getElementById("addfirst").value = "";
     document.getElementById("addlast").value = "";
     document.getElementById("addphone").value = "";
-
+	document.getElementById("addaddress").value = ""
+	document.getElementById("addage").value = ""
     findMatches(" ");
 
 }
@@ -78,15 +82,18 @@ function processAdd(results) {
 function addContact() {
     console.log("Attempting to add an entry");
     console.log("Firstname:" + $('#addfirst').val());
+    console.log("Address:" + $('#addaddress').val());
+    console.log("Age:" + $('#addage').val());
+	console.log($('#addtype').text());
     $('#searchresults').empty();
-    fetch(baseUrl + '/contact/add/' + $('#addfirst').val() + "/" + $('#addlast').val() + "/" + $('#addphone').val() + "/" + $('#addtype').text(), {
+    fetch(baseUrl + '/contact/add/' + $('#addfirst').val() + "/" + $('#addlast').val() + "/" + $('#addphone').val() + "/" + $('#addtype').text() + "/" + $('#addaddress').val() + "/"+ $('#addage').val(), {
             method: 'get'
         })
         .then(response => response.json())
         .then(json => processAdd(json))
         .catch(error => {
             {
-                alert("Add Error: Something went wrong:" + error);
+                alert("Add Error: Something went wrong, addContact():" + error);
             }
         })
 }
@@ -102,7 +109,8 @@ function editContact(row) {
 	document.getElementById("editlast").value = contactList[row]["last"];
 	document.getElementById("editphone").value = contactList[row]["phone"];
 	document.getElementById("edittype").innerText = contactList[row]["type"];
-	
+	document.getElementById("editaddress").innerText = contactList[row]["address"];
+	document.getElementById("editage").innerText = contactList[row]["age"];
 	//Save ID in modal
 	var modal = document.querySelector("#editContact");
 	modal.setAttribute("editid",editid);
@@ -119,13 +127,13 @@ function updateContact() {
     console.log("Attempting to edit an entry:"+id); 
 
     fetch(baseUrl + '/contact/update/' + id + '/' + document.getElementById("editfirst").value 
-    		+ '/' + document.getElementById("editlast").value + '/' + document.getElementById("editphone").value + '/' + document.getElementById("edittype").innerText, {
+    		+ '/' + document.getElementById("editlast").value + '/' + document.getElementById("editphone").value + '/' + document.getElementById("edittype").innerText + '/' + document.getElementById("editaddress").value + '/' + document.getElementById("editage").value, {
                 method: 'get'
             })
         .then(alert("Record for " + document.getElementById("editfirst").value + ' ' + document.getElementById("editlast").value + " updated"))
         .catch(error => {
             {
-                alert("Edit Error: something went wrong:" + error);
+                alert("Edit Error: updateContact() something went wrong:" + error);
             }
         });
         

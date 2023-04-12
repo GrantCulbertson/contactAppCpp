@@ -57,7 +57,7 @@ int main(){
       } else if (o=="4") {
 
         cout <<"Enter a first name to add: ";
-        string first,last,phone,type;
+        string first,last,phone,type,address,age;
         getline(cin,first);
         cout << "Enter a last name to add: ";
         getline(cin,last);
@@ -66,7 +66,7 @@ int main(){
         cout << "lastly, end a type: ";
         getline(cin,type);;
 
-        ctdb.addEntry(first,last,phone,type);
+        ctdb.addEntry(first,last,phone,type,address,age);
         cout << "Entry added" << endl;
 
       } else if (o=="5") {
@@ -97,7 +97,7 @@ int main(){
         	getline(cin,type);
         	if (type.size()>0) entry.type = type;
         	
-        	ctdb.editEntry(entry.ID,entry.first,entry.last,entry.phone,entry.type);
+        	ctdb.editEntry(entry.ID,entry.first,entry.last,entry.phone,entry.type,entry.address,entry.age);
         	cout << "Done!" << endl;
         }
       } else if (o=="6") {

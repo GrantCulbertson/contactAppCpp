@@ -20,9 +20,9 @@
 #ifndef CONTACTDB_H
 #define CONTACTDB_H
 
-#define DB_URL "jdbc:mariadb://localhost:3306/kenyon"
-#define USER "kenyon"
-#define PASS "GambierOwls"
+#define DB_URL "jdbc:mariadb://localhost:3306/contactApp"
+#define USER "root"
+#define PASS "GrantCulbertson"
 
 using namespace std;
 
@@ -34,8 +34,8 @@ public:
     vector<contactEntry> findByLast(string last);
     vector<contactEntry> findByType(string type);
     contactEntry fetchEntry(string id);
-    void addEntry(string first,string last,string phone,string type);
-    void editEntry(string idnum,string first,string last,string phone,string type);
+    void addEntry(string first,string last,string phone,string type,string address,string age);
+    void editEntry(string idnum,string first,string last,string phone,string type,string address,string age);
     void deleteEntry(string idnum);
 private:
     const string db_url=DB_URL;

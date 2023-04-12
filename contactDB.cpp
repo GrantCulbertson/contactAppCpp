@@ -56,7 +56,7 @@ vector<contactEntry> contactDB::find(string search) {
     while (res->next()) {
     	contactEntry entry(res->getString("First"),res->getString("Last"),
 			res->getString("Phone"),res->getString("Type"),
-	    	res->getString("ID"));
+	    	res->getString("ID"),res->getString("Address"),res->getString("Age"));
 	    	
 	    list.push_back(entry);
 
@@ -84,7 +84,7 @@ vector<contactEntry> contactDB::findByLast(string last) {
     while (res->next()) {
     	contactEntry entry(res->getString("First"),res->getString("Last"),
 			res->getString("Phone"),res->getString("Type"),
-	    	res->getString("ID"));
+	    	res->getString("ID"),res->getString("Address"),res->getString("Age"));
 	    	
 	    list.push_back(entry);
 
@@ -112,7 +112,7 @@ vector<contactEntry> contactDB::findByFirst(string first) {
     while (res->next()) {
     	contactEntry entry(res->getString("First"),res->getString("Last"),
 			res->getString("Phone"),res->getString("Type"),
-	    	res->getString("ID"));
+	    	res->getString("ID"),res->getString("Address"),res->getString("Age"));
 	    	
 	    list.push_back(entry);
 
@@ -138,7 +138,7 @@ vector<contactEntry> contactDB::findByType(string type) {
     while (res->next()) {
     	contactEntry entry(res->getString("First"),res->getString("Last"),
 			res->getString("Phone"),res->getString("Type"),
-	    	res->getString("ID"));
+	    	res->getString("ID"),res->getString("Address"),res->getString("Age"));
 	    	
 	    list.push_back(entry);
 
@@ -147,7 +147,7 @@ vector<contactEntry> contactDB::findByType(string type) {
 
 }
 
-void contactDB::addEntry(string first,string last,string phone, string type){
+void contactDB::addEntry(string first,string last,string phone, string type,string address,string age){
 
 	if (!conn) {
    		cerr << "Invalid database connection" << endl;
@@ -160,7 +160,7 @@ void contactDB::addEntry(string first,string last,string phone, string type){
      	 type="Other";
   	}
   	
-  	stmnt->executeQuery("INSERT INTO contacts(First,Last,Phone,Type) VALUES ('"+first+"','"+last+"','"+phone+"','"+type+"')");
+  	stmnt->executeQuery("INSERT INTO contacts(First,Last,Phone,Type,Address,Age) VALUES ('"+first+"','"+last+"','"+phone+"','"+type+"','"+address+"','"+age+"')");
 }
 
 contactEntry contactDB::fetchEntry(string id){
@@ -181,12 +181,13 @@ contactEntry contactDB::fetchEntry(string id){
     if (res->next()) {
     	entry = contactEntry(res->getString("First"),res->getString("Last"),
 			res->getString("Phone"),res->getString("Type"),
-	    	res->getString("ID"));
+	    	res->getString("ID"),res->getString("Address"),res->getString("Age"));
     }
     return entry;
 }
 
-void contactDB::editEntry(string idnum,string first,string last,string phone, string type){
+void contactDB::editEntry(string idnum,string first,string last,string phone, string type,string address, string age){
+	cout << "editEntry() has run" << endl;
 	if (!conn) {
    		cerr << "Invalid database connection" << endl;
    		exit (EXIT_FAILURE);
@@ -198,7 +199,7 @@ void contactDB::editEntry(string idnum,string first,string last,string phone, st
      	 type="Other";
   	}
   	
-  	stmnt->executeQuery("UPDATE contacts SET First = '"+first+"', Last ='"+last+"', Phone ='"+phone+"', Type ='"+type+"' WHERE ID='"+idnum+"'");
+  	stmnt->executeQuery("UPDATE contacts SET First = '"+first+"', Last ='"+last+"', Phone ='"+phone+"', Type ='"+type+"' , Address ='"+address+"', Age ='"+age+"' WHERE ID='"+idnum+"'");
   	
 }
 
